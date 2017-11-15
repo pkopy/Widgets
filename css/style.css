@@ -1,7 +1,7 @@
 body{
     font-family: 'Lato', sans-serif;
-    background-color: #e8e8e8;
-    color: #5a5a51;
+    background-color: #e4e4e4;
+    color: #5c5357;
     font-weight: 300;
     overflow-x: hidden;
     user-select: none;
@@ -177,4 +177,13 @@ body{
 }
 input:focus {
     background-color: rgb(148, 248, 210);
+}
+#footer{
+    height: 50px;
+    width: 100%; 
+    background-color: rgb(102,187,65);
+    position: absolute;
+    bottom: 0;
+    left: 0; 
+    z-index: 1000;
 }

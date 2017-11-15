@@ -120,7 +120,7 @@
             view.init();
             
         },
-        newWindow: function(name='', width = 250, height = 300){
+        newWindow: function(name='', width = 350, height = 500){
             windowNote = {};
             
             name = name + octo.getArrayLength();
@@ -280,25 +280,29 @@
             let sumWidth = 0;
             let row = 0;
             let pos = 0;
-            
+            const divRight = document.getElementById('notes');
             for (let i = 0; i < windows.length; i++){
                 let key = Object.keys(windows[i])[0];
                 //let pos = windows[i][key].col;
+                //console.log(windows[i][key].width)
                 
-                sumWidth +=  330; 
+                let windowWidth = windows[i][key].width;
+                let windowHeight = windows[i][key].height;
+                sumWidth +=  windowWidth + 100; 
                 if(sumWidth >= window.innerWidth){
                     row++;
-                    sumWidth = 330;
+                    sumWidth = windowWidth + 100;
                     pos = 0;
                 }
                 
-                windows[i][key].top = 50 + row * 300 + 20 * row;
-                windows[i][key].left = 20 + pos * 250 + 20 * pos;
+                windows[i][key].top = 50 + row * windowHeight + 20 * row;
+                windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
                 windows[i][key].col = pos;
                 windows[i][key].row = row;
                 pos++;
                 
             }
+            divRight.style.height = (row + 1) * 500 + 100 + 'px';
             model.change(windows)
         },
         newSetPos:function(){
@@ -323,15 +327,16 @@
         },
         setPos: function(){
             let windows = model.arrayWindows();
-            let sumWidth = 250;
             let row = 0;
             let pos = 0;
             for (let i = 0; i < windows.length; i++){
                 let key = Object.keys(windows[i])[0];
                 let pos = windows[i][key].col;
                 let row = windows[i][key].row;
-                windows[i][key].top = 50 + row * 300 + 20 * row;
-                windows[i][key].left = 20 + pos * 250 + 20 * pos;
+                let windowWidth = windows[i][key].width;
+                let windowHeight = windows[i][key].height;
+                windows[i][key].top = 50 + row * windowHeight + 20 * row;
+                windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
                // windows[i][key].col = pos;
                // windows[i][key].row = row;
             }
@@ -381,11 +386,13 @@
             let oldRow = windows[obj.id][obj.id].row
             let oldLeft = windows[obj.id][obj.id].left
             let oldTop = windows[obj.id][obj.id].top
+            let windowWidth = windows[obj.id][obj.id].width;
+            let windowHeight = windows[obj.id][obj.id].height;
             let left1 = obj.parentNode.style.left.slice(0, -2)
             let top = obj.parentNode.style.top.slice(0, -2)
             for(let i = 0; i < maxCol; i++){
                 if(oldLeft - left1 > 0){
-                    if(left1 >= (20 - clickX + (i * 250)) && left1 <= (250 - clickX + (i * 250))  && windows[obj.id][obj.id].col !== i){
+                    if(left1 >= (20 - clickX + (i * windowWidth)) && left1 <= (windowWidth - clickX + (i * windowWidth))  && windows[obj.id][obj.id].col !== i){
                         x = i;
                         windows[obj.id][obj.id].col = x;
                         let key = Object.keys(windows[obj.id])
@@ -404,7 +411,7 @@
             }
             for(let i = 0; i < maxCol + 1; i++){ 
                 if(oldLeft - left1 < 0){
-                    if(left1 >= (20 + (i * 250)) && left1 <= (250  + (i * 250))  && windows[obj.id][obj.id].col !== i){
+                    if(left1 >= (20 + (i * windowWidth)) && left1 <= (windowWidth  + (i * windowWidth))  && windows[obj.id][obj.id].col !== i){
                         x = i;
                         windows[obj.id][obj.id].col = x;
                         let key = Object.keys(windows[obj.id])
@@ -423,8 +430,8 @@
             }    
             for(let i = 0; i < maxRow; i++){
                 if(oldTop - top > 0){
-                    if(top >= (50 - clickY + (i * 300)) && top <= (300 - clickY
-                         + (i * 300))  && windows[obj.id][obj.id].row !== i){
+                    if(top >= (50 - clickY + (i * windowHeight)) && top <= (windowHeight - clickY
+                         + (i * windowHeight))  && windows[obj.id][obj.id].row !== i){
                         x = i;
                         windows[obj.id][obj.id].row = x;
                         let key = Object.keys(windows[obj.id])
@@ -443,8 +450,8 @@
             }  
             for(let i = 0; i < maxRow + 1; i++){
                 if(oldTop - top < 0){
-                    if(top >= (50 - clickY + (i * 300)) && top <= (300 - clickY
-                         + (i * 300))  && windows[obj.id][obj.id].row !== i){
+                    if(top >= (50 - clickY + (i * windowHeight)) && top <= (windowHeight - clickY
+                         + (i * windowHeight))  && windows[obj.id][obj.id].row !== i){
                         x = i;
                         windows[obj.id][obj.id].row = x;
                         let key = Object.keys(windows[obj.id])
@@ -667,7 +674,9 @@
             let windows = octo.getWindows();
             let id = e.target.parentNode.id
             let obj = windows[id]
-            let body = document.getElementById(id)
+            let body = document.getElementById(id);
+            let body1 = document.documentElement
+            let scroll = body1.scrollTop;
             body.removeEventListener('mousedown', octo.mouseDown)
             body.removeEventListener('mouseup', octo.mouseUp)
             body.removeEventListener('mouseup', octo.mouseUpremove)
@@ -675,10 +684,11 @@
             let divWrite = document.createElement('div')
             divWrite.style.width = '400px';
             divWrite.style.height = '300px';
-            divWrite.style.position = 'absolute'
+            divWrite.style.position = 'fixed'
             divWrite.style.zIndex ='1002';
+            console.log('scroll:' + scroll)
             divWrite.style.left = window.innerWidth/2 - 200 + 'px';
-            divWrite.style.top = window.innerHeight/2 - 200 + 'px';
+            divWrite.style.top = (window.innerHeight + scroll)/2 - 200 +'px';
             divWrite.style.border = '1px solid black'
             let r = windows[id][id].backgroundColor.r;
              let g = windows[id][id].backgroundColor.g;
@@ -885,7 +895,8 @@
                 let head = document.getElementById('head')
                 let body = document.documentElement
                 let scroll = body.scrollTop
-                let resize = body.onresize = (x) => x + 1;
+                console.log(scroll)
+                //let resize = body.onresize = (x) => x + 1;
                 head.className = 'head'
                 if(scroll === 0){
                     head.className ='';
