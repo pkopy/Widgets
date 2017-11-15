@@ -672,6 +672,7 @@
         },
         clickNote: function(e){
             let windows = octo.getWindows();
+            console.log(windows)
             let id = e.target.parentNode.id
             let obj = windows[id]
             let body = document.getElementById(id);
@@ -686,9 +687,39 @@
             divWrite.style.height = '300px';
             divWrite.style.position = 'fixed'
             divWrite.style.zIndex ='1002';
-            console.log('scroll:' + scroll)
-            divWrite.style.left = window.innerWidth/2 - 200 + 'px';
-            divWrite.style.top = (window.innerHeight + scroll)/2 - 200 +'px';
+            divWrite.style.top = obj[id].top  + 50+'px';
+            divWrite.style.left = obj[id].left + 250 +'px';
+            console.log('scroll:' + obj[id].top)
+
+            function moveElem(elem, endLeft, endTop){
+                let start = Date.now();
+                var x = Number(elem.style.left.slice(0,-2));
+                var y = Number(elem.style.top.slice(0,-2));
+                var id=setInterval(function(){
+                var timePassed = Date.now() - start;
+                var progress = timePassed/2000;
+                
+               // console.log(x)
+                            //console.log(progress)
+                            if (progress >1) {
+                                progress = 1;
+                            }    
+                            elem.style.left= x + ((endLeft - x) * progress) + 'px';
+                            elem.style.top= y + ((endTop - y) * progress) + 'px';
+                            console.log('top:', elem.style.top)
+                               if(progress === 1 ){
+                                   clearInterval(id);
+                                   console.log('top:', elem.style.top)
+                                }
+                            },10)
+                            //downSlideLeft.removeEventListener('scroll',scroll2)
+            }
+            
+            //divWrite.style.left = window.innerWidth/2 - 200 + 'px';
+            //divWrite.style.top = (window.innerHeight + scroll)/2 - 200 +'px';
+            let endLeft = window.innerWidth/2 - 200;
+            let endTop = (window.innerHeight)/2 - 300 ;
+            moveElem(divWrite, endLeft, endTop)
             divWrite.style.border = '1px solid black'
             let r = windows[id][id].backgroundColor.r;
              let g = windows[id][id].backgroundColor.g;
@@ -895,7 +926,7 @@
                 let head = document.getElementById('head')
                 let body = document.documentElement
                 let scroll = body.scrollTop
-                console.log(scroll)
+                //console.log(scroll)
                 //let resize = body.onresize = (x) => x + 1;
                 head.className = 'head'
                 if(scroll === 0){
