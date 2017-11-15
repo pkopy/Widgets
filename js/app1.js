@@ -691,6 +691,7 @@
             divWrite.style.left = obj[id].left + 250 +'px';
            //console.log('scroll:' + scroll)
             //console.log('start:' + obj[id].top)
+            //function who slide elem
             function moveElem(elem, endLeft, endTop){
                 let start = Date.now();
                 var x = Number(elem.style.left.slice(0,-2));
