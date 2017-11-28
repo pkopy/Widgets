@@ -698,7 +698,7 @@
                 var y = Number(elem.style.top.slice(0,-2));
                 var id=setInterval(function(){
                 var timePassed = Date.now() - start;
-                var progress = timePassed/400;
+                var progress = timePassed/150;
                 
                // console.log(x)
                             //console.log(progress)
