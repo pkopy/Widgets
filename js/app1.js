@@ -73,6 +73,11 @@
             g: 104,
             b: 187
         },
+        aboutMe:{
+            r: 255,
+            g: 192,
+            b: 103
+        },
         palette:{
             r: 65,
             g: 104,
@@ -140,7 +145,11 @@
                 cursor: '',
                 title: '',
                 content: '',
-                date: octo.date()
+                date: octo.date(),
+                timerH: 0,
+                timerM: 0,
+                timerS: 0,
+
             };
             model.add(windowNote);
            
@@ -166,10 +175,11 @@
         createDiv: function(){
             windows = model.arrayWindows();
             widgets = document.querySelectorAll('.widget');
-            
+            //console.log(windows)
                 for(let windowNote of windows){
                     let flag = 0;
                     let key = Object.keys(windowNote);
+                    //if any widget is not exist, make it
                     for(let i = 0; i < widgets.length; i++){
                         if(widgets[i].id === key[0]){
                             flag++;
@@ -243,6 +253,91 @@
                     
                 }
               
+            
+        },
+        createDivTimer: function(){
+            windows = model.arrayWindows();
+            widgets = document.querySelectorAll('.widget');
+            //console.log(windows)
+                for(let windowNote of windows){
+                    let flag = 0;
+                    let key = Object.keys(windowNote);
+                    //if any widget is not exist, make it
+                    for(let i = 0; i < widgets.length; i++){
+                        if(widgets[i].id === key[0]){
+                            flag++;
+                        }
+                    }
+                    if(flag === 0){
+                        
+                        let noteDiv = document.createElement('div')
+                        noteDiv.id = windowNote[key].id;
+                        
+                        noteDiv.style.position = windowNote[key].position;
+                        noteDiv.style.width = windowNote[key].width + 'px';
+                        noteDiv.style.height = windowNote[key].height + 'px';
+                        noteDiv.style.top = windowNote[key].top + 'px';
+                        noteDiv.style.left = windowNote[key].left + 'px';
+                        noteDiv.style.boxShadow =' 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)';
+                        noteDiv.style.backgroundColor =windowNote[key].backgroundColor;
+                        noteDiv.className = 'widget';
+                        noteDiv.style.zIndex = 0;
+                        noteDiv.style.border = '1px solid #ffffff';
+                        noteDiv.style.borderRadius = '2px';
+                        windowNote[key].title = 'Timer';
+                        console.log(noteDiv.title)
+                        var helpDiv = document.createElement('div');
+                        helpDiv.id = windowNote[key].id;
+                        helpDiv.style.position = windowNote[key].position;
+                        helpDiv.style.width = windowNote[key].width - 2 + 'px';
+                        helpDiv.style.height = windowNote[key].height -2 + 'px';
+                        helpDiv.style.position = 'absolute'
+                        helpDiv.style.top = '0px'
+                        helpDiv.className = 'widgetHelp';
+                        noteDiv.style.zIndex = 0;
+                        let toolsDiv = document.createElement('div');
+                        toolsDiv.style.position = 'absolute';
+                        toolsDiv.className = 'tools'
+                        toolsDiv.style.height = '40px';
+                        toolsDiv.style.width = '100%';
+                        toolsDiv.style.padding = '2px' 
+                        toolsDiv.style.bottom = '0px';
+                        let icon1 = document.createElement('span');
+                        icon1.className = 'material-icons md 36 icon xx';
+                        icon1.innerHTML = 'palette'
+                        icon1.style.opacity ='0.6'
+                        icon1.id = windowNote[key].id
+                        let icon2 = document.createElement('span');
+                        icon2.className = 'material-icons md 36 icon xx1';
+                        icon2.innerHTML = 'delete'
+                        icon2.style.opacity ='0.6'
+                        icon2.id = windowNote[key].id
+                        toolsDiv.appendChild(icon1)
+                        toolsDiv.appendChild(icon2)
+                        
+                        let txt = document.createElement('h1');
+                        txt.className = 'title'
+                        txt.innerHTML = windowNote[key].title;
+                        let dateTxt = document.createElement('p')
+                        dateTxt.innerHTML = windowNote[key].date
+                        dateTxt.className = 'date'
+                        let contentTxt = document.createElement('p');
+                        contentTxt.innerHTML = windowNote[key].content;
+                        contentTxt.className = 'content'
+                       
+                        
+
+                        noteDiv.appendChild(txt);
+                        noteDiv.appendChild(dateTxt);
+                        noteDiv.appendChild(contentTxt);
+                        helpDiv.appendChild(toolsDiv)
+                        noteDiv.appendChild(helpDiv)
+                        model.change(windows)  
+                        document.getElementById('notes').appendChild(noteDiv)
+                    }
+                    
+                }
+            
             
         },
         createDivPalette: function() {
@@ -562,7 +657,7 @@
             let g = start.g;
             let b = start.b;
             let text = elem.textContent.toUpperCase();
-            let menuLeft = document.querySelectorAll('.iconLeft')
+            let menuLeft = document.querySelectorAll('.menuText')
             for(let menu of menuLeft){
                 elem.removeEventListener('click', viewHead.renderHead)
             }
@@ -672,7 +767,7 @@
         },
         clickNote: function(e){
             let windows = octo.getWindows();
-            console.log(windows)
+            //console.log(windows)
             let id = e.target.parentNode.id
             let obj = windows[id]
             let body = document.getElementById(id);
@@ -785,9 +880,11 @@
             octo.createDiv();
             
             //let body = document.getElementsByTagName('body')[0];
-            window.addEventListener('resize', octo.resizeWindow)
-            let newNote = document.getElementById('newNote')
-            newNote.addEventListener('click',view.newNote)
+            window.addEventListener('resize', octo.resizeWindow);
+            let newTimer = document.getElementById('newTimer');
+            let newNote = document.getElementById('newNote');
+            newNote.addEventListener('click',view.newNote);
+            newTimer.addEventListener('click',view.newTimer);
             let windows = octo.getWindows();
             for(let windowNote of windows){
                 let key = Object.keys(windowNote)
@@ -918,6 +1015,14 @@
             view.render();
             view.init();
             
+        },
+        newTimer: function(){
+            octo.newWindow();
+            octo.createDivTimer();
+            octo.setPosInit()
+            view.init();  
+            view.render();
+            console.log('Nowy timer')
         }
     
     };
