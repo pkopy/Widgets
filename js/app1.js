@@ -131,6 +131,7 @@
             name = name + octo.getArrayLength();
             windowNote[name] = {
                 id: name,
+                timer: false,
                 col: '',
                 row: '',
                 backgroundColor: {r: 255, g: 255, b: 255},
@@ -176,7 +177,7 @@
             return date.getHours() + ':' + zero(minutes) + ':' + zero(sec) +' - ' + 
             date.getDate() + ' ' + month[date.getMonth()] + ' ' + date.getFullYear()
         },
-        createDiv: function(){
+        createDiv: function(cls){
             windows = model.arrayWindows();
             widgets = document.querySelectorAll('.widget');
             //console.log(windows)
@@ -202,6 +203,10 @@
                     noteDiv.style.boxShadow =' 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)';
                     noteDiv.style.backgroundColor =windowNote[key].backgroundColor;
                     noteDiv.className = 'widget';
+                    if(cls){
+                        noteDiv.className += cls;
+                    }
+                    
                     noteDiv.style.zIndex = 0;
                     noteDiv.style.border = '1px solid #ffffff';
                     noteDiv.style.borderRadius = '2px';
@@ -259,6 +264,7 @@
             let lastWindow = windows[last];
             lastWindow[last].title = 'Timer';
             lastWindow[last].content = 'Tutaj dodasz swój timer';
+            lastWindow[last].timer = true;
             model.change(windows)
             console.log(lastWindow)
             octo.createDiv();
@@ -743,8 +749,12 @@
             divWrite.style.backgroundColor = `rgb(${r}, ${g}, ${b})`
             let title = document.createElement('input')
             title.style.fontSize = '20px';
+            
             title.placeholder = 'Wpisz tytuł...'
             title.value = tytul;
+            if(windows[id][id].timer){
+                title.value = 'Kormorany som gupie';
+            }
             title.style.padding = '20px 0px 10px 20px'
             title.style.border = 'none'
             title.style.outline = 'none'
