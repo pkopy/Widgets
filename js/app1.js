@@ -149,6 +149,10 @@
                 timerH: 0,
                 timerM: 0,
                 timerS: 0,
+                timerD: 0,
+                timerMo: 0,
+                timerY: 0,
+                timerDelta: 0,
 
             };
             model.add(windowNote);
@@ -176,169 +180,89 @@
             windows = model.arrayWindows();
             widgets = document.querySelectorAll('.widget');
             //console.log(windows)
-                for(let windowNote of windows){
-                    let flag = 0;
-                    let key = Object.keys(windowNote);
-                    //if any widget is not exist, make it
-                    for(let i = 0; i < widgets.length; i++){
-                        if(widgets[i].id === key[0]){
-                            flag++;
-                        }
+            for(let windowNote of windows){
+                let flag = 0;
+                let key = Object.keys(windowNote);
+                //if any widget is not exist, make it
+                for(let i = 0; i < widgets.length; i++){
+                    if(widgets[i].id === key[0]){
+                        flag++;
                     }
-                    if(flag === 0){
-                        
-                        let noteDiv = document.createElement('div')
-                        noteDiv.id = windowNote[key].id;
-                        
-                        noteDiv.style.position = windowNote[key].position;
-                        noteDiv.style.width = windowNote[key].width + 'px';
-                        noteDiv.style.height = windowNote[key].height + 'px';
-                        noteDiv.style.top = windowNote[key].top + 'px';
-                        noteDiv.style.left = windowNote[key].left + 'px';
-                        noteDiv.style.boxShadow =' 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)';
-                        noteDiv.style.backgroundColor =windowNote[key].backgroundColor;
-                        noteDiv.className = 'widget';
-                        noteDiv.style.zIndex = 0;
-                        noteDiv.style.border = '1px solid #ffffff';
-                        noteDiv.style.borderRadius = '2px';
-                        var helpDiv = document.createElement('div');
-                        helpDiv.id = windowNote[key].id;
-                        helpDiv.style.position = windowNote[key].position;
-                        helpDiv.style.width = windowNote[key].width - 2 + 'px';
-                        helpDiv.style.height = windowNote[key].height -2 + 'px';
-                        helpDiv.style.position = 'absolute'
-                        helpDiv.style.top = '0px'
-                        helpDiv.className = 'widgetHelp';
-                        noteDiv.style.zIndex = 0;
-                        let toolsDiv = document.createElement('div');
-                        toolsDiv.style.position = 'absolute';
-                        toolsDiv.className = 'tools'
-                        toolsDiv.style.height = '40px';
-                        toolsDiv.style.width = '100%';
-                        toolsDiv.style.padding = '2px' 
-                        toolsDiv.style.bottom = '0px';
-                        let icon1 = document.createElement('span');
-                        icon1.className = 'material-icons md 36 icon xx';
-                        icon1.innerHTML = 'palette'
-                        icon1.style.opacity ='0.6'
-                        icon1.id = windowNote[key].id
-                        let icon2 = document.createElement('span');
-                        icon2.className = 'material-icons md 36 icon xx1';
-                        icon2.innerHTML = 'delete'
-                        icon2.style.opacity ='0.6'
-                        icon2.id = windowNote[key].id
-                        toolsDiv.appendChild(icon1)
-                        toolsDiv.appendChild(icon2)
-                        
-                        let txt = document.createElement('h1');
-                        txt.className = 'title'
-                        txt.innerHTML = windowNote[key].title;
-                        let dateTxt = document.createElement('p')
-                        dateTxt.innerHTML = windowNote[key].date
-                        dateTxt.className = 'date'
-                        let contentTxt = document.createElement('p');
-                        contentTxt.innerHTML = windowNote[key].content;
-                        contentTxt.className = 'content'
-                       
-                        
-
-                        noteDiv.appendChild(txt);
-                        noteDiv.appendChild(dateTxt);
-                        noteDiv.appendChild(contentTxt);
-                        helpDiv.appendChild(toolsDiv)
-                        noteDiv.appendChild(helpDiv)
-                        
-                        document.getElementById('notes').appendChild(noteDiv)
-                    }
-                    
                 }
-              
-            
+                if(flag === 0){
+                    
+                    let noteDiv = document.createElement('div')
+                    noteDiv.id = windowNote[key].id;
+                    
+                    noteDiv.style.position = windowNote[key].position;
+                    noteDiv.style.width = windowNote[key].width + 'px';
+                    noteDiv.style.height = windowNote[key].height + 'px';
+                    noteDiv.style.top = windowNote[key].top + 'px';
+                    noteDiv.style.left = windowNote[key].left + 'px';
+                    noteDiv.style.boxShadow =' 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)';
+                    noteDiv.style.backgroundColor =windowNote[key].backgroundColor;
+                    noteDiv.className = 'widget';
+                    noteDiv.style.zIndex = 0;
+                    noteDiv.style.border = '1px solid #ffffff';
+                    noteDiv.style.borderRadius = '2px';
+                    var helpDiv = document.createElement('div');
+                    helpDiv.id = windowNote[key].id;
+                    helpDiv.style.position = windowNote[key].position;
+                    helpDiv.style.width = windowNote[key].width - 2 + 'px';
+                    helpDiv.style.height = windowNote[key].height -2 + 'px';
+                    helpDiv.style.position = 'absolute'
+                    helpDiv.style.top = '0px'
+                    helpDiv.className = 'widgetHelp';
+                    noteDiv.style.zIndex = 0;
+                    let toolsDiv = document.createElement('div');
+                    toolsDiv.style.position = 'absolute';
+                    toolsDiv.className = 'tools'
+                    toolsDiv.style.height = '40px';
+                    toolsDiv.style.width = '100%';
+                    toolsDiv.style.padding = '2px' 
+                    toolsDiv.style.bottom = '0px';
+                    let icon1 = document.createElement('span');
+                    icon1.className = 'material-icons md 36 icon xx';
+                    icon1.innerHTML = 'palette'
+                    icon1.style.opacity ='0.6'
+                    icon1.id = windowNote[key].id
+                    let icon2 = document.createElement('span');
+                    icon2.className = 'material-icons md 36 icon xx1';
+                    icon2.innerHTML = 'delete'
+                    icon2.style.opacity ='0.6'
+                    icon2.id = windowNote[key].id
+                    toolsDiv.appendChild(icon1)
+                    toolsDiv.appendChild(icon2)
+                    let txt = document.createElement('h1');
+                    txt.className = 'title'
+                    txt.innerHTML = windowNote[key].title;
+                    let dateTxt = document.createElement('p')
+                    dateTxt.innerHTML = windowNote[key].date
+                    dateTxt.className = 'date'
+                    let contentTxt = document.createElement('p');
+                    contentTxt.innerHTML = windowNote[key].content;
+                    contentTxt.className = 'content'
+                    noteDiv.appendChild(txt);
+                    noteDiv.appendChild(dateTxt);
+                    noteDiv.appendChild(contentTxt);
+                    helpDiv.appendChild(toolsDiv)
+                    noteDiv.appendChild(helpDiv)
+                    document.getElementById('notes').appendChild(noteDiv)
+                }
+                    
+            }
         },
         createDivTimer: function(){
-            windows = model.arrayWindows();
-            widgets = document.querySelectorAll('.widget');
-            //console.log(windows)
-                for(let windowNote of windows){
-                    let flag = 0;
-                    let key = Object.keys(windowNote);
-                    //if any widget is not exist, make it
-                    for(let i = 0; i < widgets.length; i++){
-                        if(widgets[i].id === key[0]){
-                            flag++;
-                        }
-                    }
-                    if(flag === 0){
-                        
-                        let noteDiv = document.createElement('div')
-                        noteDiv.id = windowNote[key].id;
-                        
-                        noteDiv.style.position = windowNote[key].position;
-                        noteDiv.style.width = windowNote[key].width + 'px';
-                        noteDiv.style.height = windowNote[key].height + 'px';
-                        noteDiv.style.top = windowNote[key].top + 'px';
-                        noteDiv.style.left = windowNote[key].left + 'px';
-                        noteDiv.style.boxShadow =' 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)';
-                        noteDiv.style.backgroundColor =windowNote[key].backgroundColor;
-                        noteDiv.className = 'widget';
-                        noteDiv.style.zIndex = 0;
-                        noteDiv.style.border = '1px solid #ffffff';
-                        noteDiv.style.borderRadius = '2px';
-                        windowNote[key].title = 'Timer';
-                        console.log(noteDiv.title)
-                        var helpDiv = document.createElement('div');
-                        helpDiv.id = windowNote[key].id;
-                        helpDiv.style.position = windowNote[key].position;
-                        helpDiv.style.width = windowNote[key].width - 2 + 'px';
-                        helpDiv.style.height = windowNote[key].height -2 + 'px';
-                        helpDiv.style.position = 'absolute'
-                        helpDiv.style.top = '0px'
-                        helpDiv.className = 'widgetHelp';
-                        noteDiv.style.zIndex = 0;
-                        let toolsDiv = document.createElement('div');
-                        toolsDiv.style.position = 'absolute';
-                        toolsDiv.className = 'tools'
-                        toolsDiv.style.height = '40px';
-                        toolsDiv.style.width = '100%';
-                        toolsDiv.style.padding = '2px' 
-                        toolsDiv.style.bottom = '0px';
-                        let icon1 = document.createElement('span');
-                        icon1.className = 'material-icons md 36 icon xx';
-                        icon1.innerHTML = 'palette'
-                        icon1.style.opacity ='0.6'
-                        icon1.id = windowNote[key].id
-                        let icon2 = document.createElement('span');
-                        icon2.className = 'material-icons md 36 icon xx1';
-                        icon2.innerHTML = 'delete'
-                        icon2.style.opacity ='0.6'
-                        icon2.id = windowNote[key].id
-                        toolsDiv.appendChild(icon1)
-                        toolsDiv.appendChild(icon2)
-                        
-                        let txt = document.createElement('h1');
-                        txt.className = 'title'
-                        txt.innerHTML = windowNote[key].title;
-                        let dateTxt = document.createElement('p')
-                        dateTxt.innerHTML = windowNote[key].date
-                        dateTxt.className = 'date'
-                        let contentTxt = document.createElement('p');
-                        contentTxt.innerHTML = windowNote[key].content;
-                        contentTxt.className = 'content'
-                       
-                        
+            let windows = model.arrayWindows();
+            console.log(windows)
+            let last = windows.length - 1;
+            let lastWindow = windows[last];
+            lastWindow[last].title = 'Timer';
+            lastWindow[last].content = 'Tutaj dodasz swój timer';
+            model.change(windows)
+            console.log(lastWindow)
+            octo.createDiv();
 
-                        noteDiv.appendChild(txt);
-                        noteDiv.appendChild(dateTxt);
-                        noteDiv.appendChild(contentTxt);
-                        helpDiv.appendChild(toolsDiv)
-                        noteDiv.appendChild(helpDiv)
-                        model.change(windows)  
-                        document.getElementById('notes').appendChild(noteDiv)
-                    }
-                    
-                }
-            
-            
         },
         createDivPalette: function() {
             let palette = document.createElement('div');
@@ -682,7 +606,7 @@
                         elem.addEventListener('click', viewHead.renderHead)
                     }
                 }
-            }, 10)
+            }, 1)
         },
         changeValue: function(value, end, x){
             x = x || 1;
@@ -765,6 +689,7 @@
             octo.setPosInit();
             view.render();
         },
+        
         clickNote: function(e){
             let windows = octo.getWindows();
             //console.log(windows)
@@ -794,25 +719,18 @@
                 var id=setInterval(function(){
                 var timePassed = Date.now() - start;
                 var progress = timePassed/150;
-                
-               // console.log(x)
-                            //console.log(progress)
-                            if (progress >1) {
-                                progress = 1;
-                            }    
-                            elem.style.left= x + ((endLeft - x) * progress) + 'px';
-                            elem.style.top= y - scroll + ((endTop - y+ scroll) * progress) + 'px';
-                            //console.log('top:', elem.style.top)
-                               if(progress === 1 ){
-                                   clearInterval(id);
-                                   console.log('top:', elem.style.top)
-                                }
-                            },10)
-                            //downSlideLeft.removeEventListener('scroll',scroll2)
+                    if (progress >1) {
+                        progress = 1;
+                    }    
+                    elem.style.left= x + ((endLeft - x) * progress) + 'px';
+                    elem.style.top= y - scroll + ((endTop - y+ scroll) * progress) + 'px';
+                    if(progress === 1 ){
+                        clearInterval(id);
+                    }
+                },10)
+                            
             }
             
-            //divWrite.style.left = window.innerWidth/2 - 200 + 'px';
-            //divWrite.style.top = (window.innerHeight + scroll)/2 - 200 +'px';
             let endLeft = window.innerWidth/2 - 200;
             let endTop = (window.innerHeight)/2 - 250 ;
             moveElem(divWrite, endLeft, endTop)
@@ -871,8 +789,167 @@
                 
                 
             })
+        },
+    /*---Timer---*/
+    timeComponent: function(x, y, radius, line, u, unit){
+        let today = new Date();
+        let date = model.getTimerArray();
+        let year = date[0].year;
+        let month = date[0].month;
+        let day = date[0].day;
+        let delta = date[0].delta;
+        let tommorow = new Date(year, month-1, day, 13, 20, 0)
+        let a = Number.parseInt((tommorow - today)/1000)
+        
+        let color = 'rgb(148, 255, 49)'
+        if(a<0){
+            color = 'red'
         }
-    }
+        s = Math.abs(a%60);
+        m = Number.parseInt(Math.abs(a/60));
+        h = Number.parseInt(Math.abs(a/3600));
+        d = Number.parseInt(Math.abs(h/24))
+        if(m >= 60){m = m - 60 * h}
+        if(h >= 24){h = h - 24 * d}
+        //console.log(s, m, h)
+        
+        
+        if(unit === 0){f = 60 - s};
+        if(unit === 1){f = 60 - m} 
+        if(unit === 2){f = 24 - h};
+        if(unit === 3){
+            f =  d; 
+            u = -720/delta
+        }
+        if(radius === 0){
+            let canvas = document.querySelectorAll('canvas')[0]
+            let ctx = canvas.getContext("2d");
+            ctx.beginPath();
+            // ctx = myTimerArea.context;
+            ctx.font = 50 + "px arial";
+            ctx.textBaseline="middle";
+            ctx.textAlign="center";
+            ctx.fillStyle = 'black'
+            if(unit === 2){
+                if(24 - f < 10){
+                ctx.fillText(("0" + (24-f + ':')).toString(), x, y)
+                }else{
+                ctx.fillText((24-f + ':').toString(), x, y)
+                }
+            }else if(unit === 1){
+                ctx.fillText((60-f + ':').toString(), x, y)
+            }else if(unit === 3){
+                ctx.fillText(f.toString(), x, y)
+            }else{
+                ctx.fillText(60-f.toString(), x, y)
+            }
+            ctx.beginPath();
+            // ctx = myTimerArea.context;
+            ctx.font = 30 + "px arial";
+            ctx.textBaseline="middle";
+            ctx.textAlign="center";
+            ctx.fillStyle = 'red'
+            ctx.fillText(('D').toString(), x, y+40)
+            ctx.closePath()
+        }else{
+            let canvass = document.querySelectorAll('canvas')
+            for(let canvas of canvass){
+                let ctx = canvas.getContext("2d");
+                ctx.beginPath();
+                ctx.lineWidth = line-2;
+                ctx.strokeStyle = 'rgb(228, 228, 228)';
+                ctx.arc(x, y, radius, 0,2*Math.PI);
+                ctx.stroke();
+                ctx.beginPath();
+                var grd=ctx.createRadialGradient(75,50,5,90,60,100);
+                grd.addColorStop(0,"red");
+                grd.addColorStop(1,"white");
+                ctx.lineWidth = line;
+                ctx.strokeStyle = color;
+                ctx.arc(x, y, radius, (f*Math.PI/(360/u))-Math.PI/2, -Math.PI/2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.font = 30 + "px arial";
+                ctx.textBaseline="middle";
+                ctx.textAlign="center";
+                if(unit === 2){
+                    ctx.fillText(24-f.toString(), x, y)
+                }else if(unit === 1){
+                    ctx.fillText(60-f.toString(), x, y)
+                }else if(unit === 3){
+                    ctx.fillText(f.toString(), x, y)
+                }else{
+                    ctx.fillText(60-f.toString(), x, y)
+                }
+            }	
+        }
+    },
+    updateTimeArea: function (){
+        controler.clear();
+        let date = model.getTimerArray();
+        let func = date[0].type
+        controler.typeTimer(func());
+    },
+    clear: function(){
+		
+        let canvas = document.querySelectorAll('canvas')
+		for(let canva of canvas){
+			//console.log(canva)
+			canva.getContext("2d").clearRect(0, 0, canva.width, canva.height);
+		}	
+        
+    },
+    addDate: function(){
+        let input = document.querySelectorAll('input')[0];
+        let arr = input.value.split('-');
+        let today = new Date();
+        let now = arr[0] - today.getDate();
+        let sel = document.getElementById('sel')
+        let type = sel.value;
+        if(type === 'value2'){type = controler.addTimerCircle}
+        if(type === 'value1'){type = controler.addTimerNumber}
+        if(type === 'value3'){type = controler.x}
+        date = {
+            day: arr[0],
+            month: arr[1],
+            year: arr[2],
+            delta: now,
+            type: type
+        }
+        if((!isNaN(date.day) && date.day) && (!isNaN(date.month) && date.month) && (!isNaN(date.year) && date.year)){
+            model.clear();
+            controler.clear()
+            model.pushTimer(date);
+            controler.typeTimer(date.type());
+        //model.getSecComponent();
+            view.render();
+            let a = model.getTimerArray();
+            console.log(a[0])
+            input.parentNode.removeChild(input)
+            
+        }   
+    },
+    addTimerCircle: function(){
+        
+        let secComponent = controler.timeComponent(290, 60, 30, 7, 12, 0);
+        let minComponent = controler.timeComponent(210, 60, 30, 7, 12, 1)
+        let hourComponent = controler.timeComponent(130, 60, 30, 7, 30, 2);
+		let dayComponent = controler.timeComponent(50, 60, 30, 7, 1, 3);
+    },
+    addTimerNumber: function(){
+        
+        let secComponent = controler.timeComponent(290, 60, 0, 7, 12, 0);
+        let minComponent = controler.timeComponent(210, 60, 0, 7, 12, 1)
+        let hourComponent = controler.timeComponent(130, 60, 0, 7, 30, 2);
+		let dayComponent = controler.timeComponent(50, 60, 0, 7, 1, 3);
+    },
+    typeTimer: function(func){
+        return func;
+    },
+
+}
+    
+    
     /*===VIEW===*/
     let view = {
         init: function(){
@@ -1061,8 +1138,24 @@
             let start = model.head.start
             octo.changeColor(start, end, elem)
         }
+    };
+    let viewTimer = {
+        init: function(){
+            let canvas = document.createElement('canvas');
+            //canvas.id = 'canvas';
+            document.body.insertBefore(canvas, document.body.childNodes[0]);
+            canvas.width = 350;
+            canvas.height = 150;
+            context = canvas.getContext("2d");
+            console.log(controler)
+            let butt = document.getElementById('but');
+            console.log(butt)
+            butt.addEventListener('click', controler.addDate)
+        },
+        render: function(){
+            interval = setInterval(controler.updateTimeArea, 1000)
+        }
     }
-    
     octo.init();
     })()
     
