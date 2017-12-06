@@ -167,6 +167,7 @@
                 timerMo: 0,
                 timerY: 0,
                 timerDelta: 0,
+                timerType: '',
 
             };
             model.add(windowNote);
@@ -799,7 +800,7 @@
             document.getElementsByTagName('body')[0].appendChild(divWrite)
             if(windows[id][id].timer){
                title.value = title.value;
-                viewTimer.init(divWrite)
+                viewTimer.init(divWrite, windows[id][id])
                 
             }
             
@@ -814,18 +815,18 @@
                 divWrite.remove();
                 viewTimer.stopRender();
                 body.addEventListener('mousedown', octo.mouseDown)
-                
+                model.clear()
                 
             })
         },
     /*---Timer---*/
-    timeComponent: function(x, y, radius, line, u, unit){
+    timeComponent: function(x, y, radius, line, u, unit, id){
         let today = new Date();
-        let date = model.getTimerArray();
-        let year = date[0].year;
-        let month = date[0].month;
-        let day = date[0].day;
-        let delta = date[0].delta;
+        console.log(id.timerY)
+        let year = id.timerY;
+        let month = id.timerMo;
+        let day = id.timerD;
+        let delta = id.timerDelta;
         let tommorow = new Date(year, month-1, day, 13, 20, 0)
         let a = Number.parseInt((tommorow - today)/1000)
         
@@ -914,55 +915,66 @@
     },
     updateTimeArea: function (){
         octo.clear();
-        let date = model.getTimerArray();
-        let func = date[0].type
-        octo.typeTimer(func());
+        octo.addTimerCircle(model.timer[0]);
     },
     clear: function(){
 		
         let canvas = document.querySelectorAll('canvas')
 		for(let canva of canvas){
-			console.log(canva)
+			//console.log(canva)
 			canva.getContext("2d").clearRect(0, 0, canva.width, canva.height);
 		}	
         
     },
-    addDate: function(){
-        let input = document.querySelectorAll('input')[0];
-        let arr = [11,12,2017]//input.value.split('-');
+    objTimer: function(obj){
+        return obj;
+    },
+    addDate: function(id){
+        let windows = octo.getWindows();
         let today = new Date();
-        let now = arr[0] - today.getDate();
+        console.log(id.timerY);
+        let arr = [15,12,2018]
+        if(id.timerY === 0){
+            id.timerD =  arr[0];
+            id.timerMo = arr[1];
+            id.timerY = arr[2];
+            id.timerDelta = id.timerD - today.getDate();;
+            id.timerType =  octo.addTimerCircle
+        }
+        //input.value.split('-');
+        
+        //let now = 
         /*let sel = document.getElementById('sel')
         let type = sel.value;
         if(type === 'value2'){type = controler.addTimerCircle}
         if(type === 'value1'){type = controler.addTimerNumber}
         if(type === 'value3'){type = controler.x}*/
-        date = {
-            day: arr[0],
-            month: arr[1],
-            year: arr[2],
-            delta: now,
-            type: octo.addTimerCircle
-        }
+        
+        
+        model.change(windows)
+        model.pushTimer(id)
+        console.log(model.getTimerArray())
        // if((!isNaN(date.day) && date.day) && (!isNaN(date.month) && date.month) && (!isNaN(date.year) && date.year)){
-            model.clear();
+            //model.clear();
             octo.clear()
-            model.pushTimer(date);
-            octo.typeTimer(date.type());
+            let obj = octo.objTimer(id)
+            console.log(obj)
+            //model.pushTimer(date);
+            octo.addTimerCircle(id);
         //model.getSecComponent();
             viewTimer.render();
-            let a = model.getTimerArray();
-            console.log(a[0])
+            //let a = model.getTimerArray();
+           // console.log(a[0])
             //input.parentNode.removeChild(input)
             
        // }   
     },
-    addTimerCircle: function(){
-        
-        let secComponent = octo.timeComponent(290, 60, 30, 7, 12, 0);
-        let minComponent = octo.timeComponent(210, 60, 30, 7, 12, 1)
-        let hourComponent = octo.timeComponent(130, 60, 30, 7, 30, 2);
-		let dayComponent = octo.timeComponent(50, 60, 30, 7, 1, 3);
+    addTimerCircle: function(id){
+        console.log(id)
+        let secComponent = octo.timeComponent(290, 60, 30, 7, 12, 0, id);
+        let minComponent = octo.timeComponent(210, 60, 30, 7, 12, 1, id)
+        let hourComponent = octo.timeComponent(130, 60, 30, 7, 30, 2, id);
+		let dayComponent = octo.timeComponent(50, 60, 30, 7, 1, 3, id);
     },
     addTimerNumber: function(){
         
@@ -971,8 +983,8 @@
         let hourComponent = controler.timeComponent(130, 60, 0, 7, 30, 2);
 		let dayComponent = controler.timeComponent(50, 60, 0, 7, 1, 3);
     },
-    typeTimer: function(func){
-        return func;
+    typeTimer: function(func, id){
+        return func(id);
     },
 
 }
@@ -1168,7 +1180,7 @@
         }
     };
     let viewTimer = {
-        init: function(note){
+        init: function(note, obj){
             let canvas = document.createElement('canvas');
             //canvas.id = 'canvas';
             note.appendChild(canvas)//, document.body.childNodes[0]);
@@ -1178,14 +1190,17 @@
             canvas.style.left = '20px'
             canvas.style.top = '100px'
             context = canvas.getContext("2d");
-            octo.addDate()
-           // console.log(controler)
+            
+            octo.addDate(obj)
+            
+           console.log(note)
             /*let butt = document.getElementById('but');
             console.log(butt)
             butt.addEventListener('click', controler.addDate)*/
         },
         render: function(){
-            interval = setInterval(octo.updateTimeArea, 1000)
+           interval = setInterval(octo.updateTimeArea, 1000)
+            
         },
         stopRender: function(){
             clearInterval(interval)
