@@ -112,6 +112,19 @@
             r: 255,
             g: 192,
             b: 103
+        },
+        timer: [],
+        getTimerArray: function(){
+            console.log(this.timer)
+            return this.timer;
+        },
+        //
+        pushTimer: function(obj){
+            this.timer.push(obj)
+        },
+        
+        clear: function(){
+            this.timer.pop();
         }
     };
     /*===OCTO===*/
@@ -752,9 +765,7 @@
             
             title.placeholder = 'Wpisz tytuł...'
             title.value = tytul;
-            if(windows[id][id].timer){
-                title.value = 'Kormorany som gupie';
-            }
+           
             title.style.padding = '20px 0px 10px 20px'
             title.style.border = 'none'
             title.style.outline = 'none'
@@ -786,6 +797,12 @@
             divWrite.appendChild(textContent)
             document.getElementsByTagName('body')[0].appendChild(divBack)
             document.getElementsByTagName('body')[0].appendChild(divWrite)
+            if(windows[id][id].timer){
+               title.value = title.value;
+                viewTimer.init(divWrite)
+                
+            }
+            
             divBack.addEventListener('click',function(){
                 windows[id][id].title = title.value;
                 windows[id][id].content = textContent.value
@@ -795,6 +812,7 @@
                 body.childNodes[2].innerHTML = windows[id][id].content
                 divBack.remove();
                 divWrite.remove();
+                viewTimer.stopRender();
                 body.addEventListener('mousedown', octo.mouseDown)
                 
                 
@@ -895,56 +913,56 @@
         }
     },
     updateTimeArea: function (){
-        controler.clear();
+        octo.clear();
         let date = model.getTimerArray();
         let func = date[0].type
-        controler.typeTimer(func());
+        octo.typeTimer(func());
     },
     clear: function(){
 		
         let canvas = document.querySelectorAll('canvas')
 		for(let canva of canvas){
-			//console.log(canva)
+			console.log(canva)
 			canva.getContext("2d").clearRect(0, 0, canva.width, canva.height);
 		}	
         
     },
     addDate: function(){
         let input = document.querySelectorAll('input')[0];
-        let arr = input.value.split('-');
+        let arr = [11,12,2017]//input.value.split('-');
         let today = new Date();
         let now = arr[0] - today.getDate();
-        let sel = document.getElementById('sel')
+        /*let sel = document.getElementById('sel')
         let type = sel.value;
         if(type === 'value2'){type = controler.addTimerCircle}
         if(type === 'value1'){type = controler.addTimerNumber}
-        if(type === 'value3'){type = controler.x}
+        if(type === 'value3'){type = controler.x}*/
         date = {
             day: arr[0],
             month: arr[1],
             year: arr[2],
             delta: now,
-            type: type
+            type: octo.addTimerCircle
         }
-        if((!isNaN(date.day) && date.day) && (!isNaN(date.month) && date.month) && (!isNaN(date.year) && date.year)){
+       // if((!isNaN(date.day) && date.day) && (!isNaN(date.month) && date.month) && (!isNaN(date.year) && date.year)){
             model.clear();
-            controler.clear()
+            octo.clear()
             model.pushTimer(date);
-            controler.typeTimer(date.type());
+            octo.typeTimer(date.type());
         //model.getSecComponent();
-            view.render();
+            viewTimer.render();
             let a = model.getTimerArray();
             console.log(a[0])
-            input.parentNode.removeChild(input)
+            //input.parentNode.removeChild(input)
             
-        }   
+       // }   
     },
     addTimerCircle: function(){
         
-        let secComponent = controler.timeComponent(290, 60, 30, 7, 12, 0);
-        let minComponent = controler.timeComponent(210, 60, 30, 7, 12, 1)
-        let hourComponent = controler.timeComponent(130, 60, 30, 7, 30, 2);
-		let dayComponent = controler.timeComponent(50, 60, 30, 7, 1, 3);
+        let secComponent = octo.timeComponent(290, 60, 30, 7, 12, 0);
+        let minComponent = octo.timeComponent(210, 60, 30, 7, 12, 1)
+        let hourComponent = octo.timeComponent(130, 60, 30, 7, 30, 2);
+		let dayComponent = octo.timeComponent(50, 60, 30, 7, 1, 3);
     },
     addTimerNumber: function(){
         
@@ -1150,20 +1168,27 @@
         }
     };
     let viewTimer = {
-        init: function(){
+        init: function(note){
             let canvas = document.createElement('canvas');
             //canvas.id = 'canvas';
-            document.body.insertBefore(canvas, document.body.childNodes[0]);
+            note.appendChild(canvas)//, document.body.childNodes[0]);
             canvas.width = 350;
             canvas.height = 150;
+            canvas.style.position = 'absolute';
+            canvas.style.left = '20px'
+            canvas.style.top = '100px'
             context = canvas.getContext("2d");
-            console.log(controler)
-            let butt = document.getElementById('but');
+            octo.addDate()
+           // console.log(controler)
+            /*let butt = document.getElementById('but');
             console.log(butt)
-            butt.addEventListener('click', controler.addDate)
+            butt.addEventListener('click', controler.addDate)*/
         },
         render: function(){
-            interval = setInterval(controler.updateTimeArea, 1000)
+            interval = setInterval(octo.updateTimeArea, 1000)
+        },
+        stopRender: function(){
+            clearInterval(interval)
         }
     }
     octo.init();
