@@ -135,7 +135,7 @@
             octo.setPosInit();
             view.render();
             viewHead.init();
-            view.init();
+            //view.init();
             
         },
         newWindow: function(name='', width = 330, height = 480){
