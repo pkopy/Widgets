@@ -138,7 +138,7 @@
             view.init();
             
         },
-        newWindow: function(name='', width = 350, height = 500){
+        newWindow: function(name='', width = 330, height = 480){
             windowNote = {};
             
             name = name + octo.getArrayLength();
@@ -276,11 +276,13 @@
             console.log(windows)
             let last = windows.length - 1;
             let lastWindow = windows[last];
+            console.log(lastWindow)
             lastWindow[last].title = 'Timer';
             lastWindow[last].content = 'Tutaj dodasz swój timer';
+            lastWindow[last].height = 300;
             lastWindow[last].timer = true;
             model.change(windows)
-            console.log(lastWindow)
+            
             octo.createDiv();
 
         },
@@ -319,6 +321,7 @@
             let sumWidth = 0;
             let row = 0;
             let pos = 0;
+            let x =0;
             const divRight = document.getElementById('notes');
             for (let i = 0; i < windows.length; i++){
                 let key = Object.keys(windows[i])[0];
@@ -331,18 +334,29 @@
                 if(sumWidth >= window.innerWidth){
                     row++;
                     sumWidth = windowWidth + 100;
+                    x = pos;
                     pos = 0;
                 }
+                if(row > 0){
+                    //let xxx = windows[pos][key].height
+                    windows[i][key].top = 50 + row * (windows[(row + pos)-1][pos+row-1].height) + 20 * row;
+                    console.log(windows[i])
+                    windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                    pos++;
+                }else{
+                    windows[i][key].top = 50 + row * windowHeight + 20 * row;
+                    windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                    windows[i][key].col = pos;
+                    windows[i][key].row = row;
+                    pos++;
+                }
                 
-                windows[i][key].top = 50 + row * windowHeight + 20 * row;
-                windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
-                windows[i][key].col = pos;
-                windows[i][key].row = row;
-                pos++;
+               
                 
             }
             divRight.style.height = (row + 1) * 500 + 100 + 'px';
             model.change(windows)
+            console.log(windows)
         },
         newSetPos:function(){
             let windows = model.arrayWindows();
@@ -372,10 +386,19 @@
                 let key = Object.keys(windows[i])[0];
                 let pos = windows[i][key].col;
                 let row = windows[i][key].row;
+                
                 let windowWidth = windows[i][key].width;
                 let windowHeight = windows[i][key].height;
-                windows[i][key].top = 50 + row * windowHeight + 20 * row;
-                windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                if(row > 0){
+                    //let xxx = windows[pos][key].height
+                    windows[i][key].top = 50 + row * (windows[row-1 +pos][pos].height) + 20 * row;
+                   // console.log(windows[row-1][pos].height)
+                    windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                }else{
+                    //windows[i][key].top = 50 + row * windowHeight + 20 * row;
+                   // windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                }
+                
                // windows[i][key].col = pos;
                // windows[i][key].row = row;
             }
@@ -467,6 +490,7 @@
                     }
                 }
             }    
+            //moving to up
             for(let i = 0; i < maxRow; i++){
                 if(oldTop - top > 0){
                     if(top >= (50 - clickY + (i * windowHeight)) && top <= (windowHeight - clickY
@@ -487,6 +511,7 @@
                     }
                 }
             }  
+            //moving to down
             for(let i = 0; i < maxRow + 1; i++){
                 if(oldTop - top < 0){
                     if(top >= (50 - clickY + (i * windowHeight)) && top <= (windowHeight - clickY
