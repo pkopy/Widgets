@@ -336,12 +336,17 @@
                     sumWidth = windowWidth + 100;
                     x = pos;
                     pos = 0;
+                    console.log(x)
                 }
                 if(row > 0){
                     //let xxx = windows[pos][key].height
-                    windows[i][key].top = 50 + row * (windows[(row + pos)-1][pos+row-1].height) + 20 * row;
-                    console.log(windows[i])
+                    let ccc = windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].height  +
+                    windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].top - 50;
+                    windows[i][key].top = 50 +  (ccc) + 20 ;
+                    console.log(ccc)
                     windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                    windows[i][key].col = pos;
+                    windows[i][key].row = row;
                     pos++;
                 }else{
                     windows[i][key].top = 50 + row * windowHeight + 20 * row;
@@ -389,15 +394,20 @@
                 
                 let windowWidth = windows[i][key].width;
                 let windowHeight = windows[i][key].height;
-                if(row > 0){
+               
+                    //let ccc = windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].height  +
+                   // windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].top - 50;
+                   // windows[i][key].top = 50 +  (ccc) + 20 ;
+                   // console.log(ccc)
+                   //// windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
                     //let xxx = windows[pos][key].height
-                    windows[i][key].top = 50 + row * (windows[row-1 +pos][pos].height) + 20 * row;
+                  // windows[i][key].top = 50 + row * (windows[row-1 +pos][pos].height) + 20 * row;
                    // console.log(windows[row-1][pos].height)
-                    windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
-                }else{
-                    //windows[i][key].top = 50 + row * windowHeight + 20 * row;
                    // windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
-                }
+                
+                windows[i][key].top = 50 + row * windowHeight + 20 * row;
+                   windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                
                 
                // windows[i][key].col = pos;
                // windows[i][key].row = row;
