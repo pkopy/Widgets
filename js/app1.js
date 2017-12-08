@@ -279,7 +279,7 @@
             console.log(lastWindow)
             lastWindow[last].title = 'Timer';
             lastWindow[last].content = 'Tutaj dodasz swój timer';
-            lastWindow[last].height = 300;
+            lastWindow[last].height = 250;
             lastWindow[last].timer = true;
             model.change(windows)
             
@@ -451,16 +451,16 @@
             }
             model.change(windows)
         },
-        move: function (e){
+        move: function (event){
             let windows = octo.getWindows();
             let objWindow;
-            let id = e.target.id;
-            let obj = e.target;
+            let id = event.target.id;
+            let obj = event.target;
             
             let clickX;
             let clickY;
-            let x = e.clientX;
-            let y = e.clientY;
+            let x = event.clientX;
+            let y = event.clientY;
             let arrHelpCol = [];
             let arrHelpRow = [];
             for(let windowNote of windows){
