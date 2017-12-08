@@ -321,7 +321,7 @@
             let sumWidth = 0;
             let row = 0;
             let pos = 0;
-            let x =0;
+            let x = 0; //number columns
             const divRight = document.getElementById('notes');
             for (let i = 0; i < windows.length; i++){
                 let key = Object.keys(windows[i])[0];
@@ -336,14 +336,14 @@
                     sumWidth = windowWidth + 100;
                     x = pos;
                     pos = 0;
-                    console.log(x)
+                    //console.log(x)
                 }
                 if(row > 0){
                     //let xxx = windows[pos][key].height
                     let ccc = windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].height  +
                     windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].top - 50;
                     windows[i][key].top = 50 +  (ccc) + 20 ;
-                    console.log(ccc)
+                    //console.log(ccc)
                     windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
                     windows[i][key].col = pos;
                     windows[i][key].row = row;
@@ -385,28 +385,65 @@
         },
         setPos: function(){
             let windows = model.arrayWindows();
-            let row = 0;
-            let pos = 0;
+            let arrHelpCol = [];
+            for(let windowNote of windows){
+                let idObj = Object.keys(windowNote)[0];
+                arrHelpCol.push(windowNote[idObj].col);
+            }
+            let x = octo.max(arrHelpCol);
             for (let i = 0; i < windows.length; i++){
                 let key = Object.keys(windows[i])[0];
                 let pos = windows[i][key].col;
                 let row = windows[i][key].row;
+               // console.log(row, pos, key)
+                let objAboveId;
                 
+                for(let j = 0; j < windows.length; j++){
+                   // console.log(windows[j][j].row)
+                    if(pos === windows[j][j].col && row === (windows[j][j].row+1)){
+                        objAboveId = windows[j][j].id
+                        
+                    }
+
+                }
+               // console.log("objekt: " + objAboveId)
                 let windowWidth = windows[i][key].width;
                 let windowHeight = windows[i][key].height;
-               
-                    //let ccc = windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].height  +
-                   // windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].top - 50;
-                   // windows[i][key].top = 50 +  (ccc) + 20 ;
+                
+               // if(row === 0){
+                   // ccc = 0;
+                   if(objAboveId){
+                    let ccc = windows[objAboveId][objAboveId].top + windows[objAboveId][objAboveId].height
+                    windows[i][key].top = ccc + 20;
+                    windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                    console.log("window above: " + windows[objAboveId][objAboveId].id)
+                    console.log("windows:" + i + " Windows top: " + windows[i][key].top)
+                    
+                   }else{
+                    windows[i][key].top = 50 + row * windowHeight + 20 * row;
+                    windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                   }
+                   
+                    //console.log(ccc)
+                    
+               // }
+              //  if(row > 0){
+              //      let ccc = windows[objAboveId][objAboveId].top + windows[objAboveId][objAboveId].height//windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].height  +
+                    //windows[(row - 1 + pos)+(x-1)*(row-1)][(row - 1 + pos)+(x-1)*(row-1)].top - 50;
+              //      windows[i][key].top = 20 +  (ccc);
+             //       windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+             //      console.log(ccc)
+                    
+             //   }
+                    //
                    // console.log(ccc)
                    //// windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
                     //let xxx = windows[pos][key].height
                   // windows[i][key].top = 50 + row * (windows[row-1 +pos][pos].height) + 20 * row;
                    // console.log(windows[row-1][pos].height)
                    // windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
-                
-                windows[i][key].top = 50 + row * windowHeight + 20 * row;
-                   windows[i][key].left = 20 + pos * windowWidth + 20 * pos;
+                  // model.change(windows)
+                    
                 
                 
                // windows[i][key].col = pos;
@@ -460,8 +497,9 @@
             let oldTop = windows[obj.id][obj.id].top
             let windowWidth = windows[obj.id][obj.id].width;
             let windowHeight = windows[obj.id][obj.id].height;
-            let left1 = obj.parentNode.style.left.slice(0, -2)
+            let left1 = obj.parentNode.style.left.slice(0, -2) 
             let top = obj.parentNode.style.top.slice(0, -2)
+            //moving to left
             for(let i = 0; i < maxCol; i++){
                 if(oldLeft - left1 > 0){
                     if(left1 >= (20 - clickX + (i * windowWidth)) && left1 <= (windowWidth - clickX + (i * windowWidth))  && windows[obj.id][obj.id].col !== i){
@@ -481,6 +519,7 @@
                     }
                 }
             }
+            //moving to right
             for(let i = 0; i < maxCol + 1; i++){ 
                 if(oldLeft - left1 < 0){
                     if(left1 >= (20 + (i * windowWidth)) && left1 <= (windowWidth  + (i * windowWidth))  && windows[obj.id][obj.id].col !== i){
@@ -510,10 +549,15 @@
                         let key = Object.keys(windows[obj.id])
                         let colStart = windows[key][key].col
                         let rowStart = windows[key][key].row
+                        //console.log(windows[key][key].row)
                             for(let allPo of allPos){
                                 if((allPo.pos + maxCol + 1) === position){
                                     windows[allPo.id][allPo.id].row = rowStart + 1
+                                    windows[key][key].top = windows[allPo.id][allPo.id].top
+                                   // console.log(windows[allPo.id][allPo.id].row)
+                                   // console.log(windows[allPo.id][allPo.id].id)
                                 }
+                                //octo.setPos();
                             }    
                         model.change(windows)
                         octo.setPos();
@@ -534,7 +578,9 @@
                             for(let allPo of allPos){
                                 if((allPo.pos - maxCol - 1) === position){
                                     windows[allPo.id][allPo.id].row = rowStart - 1
+                                     windows[allPo.id][allPo.id].top = windows[key][key].top
                                 }
+                                //octo.setPos();
                             }    
                         model.change(windows)
                         octo.setPos();
